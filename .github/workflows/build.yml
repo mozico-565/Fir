@@ -21,7 +21,7 @@ jobs:
 
       - name: Extract and build
         run: |
-          unzip -q Fir-Android-Source-v2.zip -d fir
+          unzip -q Fir-Android-Source-v4.zip -d fir
           gradle -p fir assembleDebug --stacktrace
 
       - uses: actions/upload-artifact@v4
