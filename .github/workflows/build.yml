@@ -7,25 +7,38 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
 
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
 
-      - name: Extract and build
+      - name: Extract Fir v11
         run: |
-          unzip -q Fir-Android-Source-v11.zip -d fir assembleDebug assembleRelease --stacktrace
+          rm -rf fir
+          mkdir fir
+          unzip -q Fir-Android-Source-v11.zip -d fir
 
-      - uses: actions/upload-artifact@v4
+      - name: Build Fir v11 APKs
+        working-directory: fir/zip
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug assembleRelease --stacktrace
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
         with:
-          name: Fir-v9-APKs
+          name: Fir-v11-APKs
           path: |
-            fir/app/build/outputs/apk/debug/app-debug.apk
-            fir/app/build/outputs/apk/release/app-release.apk
+            fir/zip/app/build/outputs/apk/debug/app-debug.apk
+            fir/zip/app/build/outputs/apk/release/app-release.apk
