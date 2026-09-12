@@ -27,7 +27,7 @@ jobs:
         run: |
           rm -rf fir
           mkdir fir
-          unzip -q Fir-Android-Source-v11.zip -d fir
+          unzip -q Fir-Android-Source-v12.zip -d fir
 
       - name: Build Fir v11 APKs
         working-directory: fir/zip
@@ -38,7 +38,7 @@ jobs:
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: Fir-v11-APKs
+          name: Fir-v12-APKs
           path: |
             fir/zip/app/build/outputs/apk/debug/app-debug.apk
             fir/zip/app/build/outputs/apk/release/app-release.apk
