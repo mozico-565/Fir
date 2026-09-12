@@ -3,11 +3,15 @@ name: Build Fir APK
 on:
   workflow_dispatch:
   push:
+    branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,14 +27,7 @@ jobs:
         with:
           gradle-version: "8.9"
 
-      - name: Extract Fir v11
-        run: |
-          rm -rf fir
-          mkdir fir
-          unzip -q Fir-Android-Source-v12.zip -d fir
-
-      - name: Build Fir v11 APKs
-        working-directory: fir/zip
+      - name: Build debug and release APKs
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug assembleRelease --stacktrace
@@ -38,7 +35,9 @@ jobs:
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: Fir-v12-APKs
+          name: Fir-APKs
           path: |
-            fir/zip/app/build/outputs/apk/debug/app-debug.apk
-            fir/zip/app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 14
