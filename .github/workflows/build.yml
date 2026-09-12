@@ -27,7 +27,14 @@ jobs:
         with:
           gradle-version: "8.9"
 
+      - name: Extract Fir source
+        run: |
+          rm -rf Fir-Android-Source-v12
+          unzip -q Fir-Android-Source-v12.zip
+          rm -f "Fir-Android-Source-v12/app/src/main/java/com/fir/translate/core/ClipboardHistoryManager-1.kt"
+
       - name: Build debug and release APKs
+        working-directory: Fir-Android-Source-v12
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug assembleRelease --stacktrace
@@ -37,7 +44,7 @@ jobs:
         with:
           name: Fir-APKs
           path: |
-            app/build/outputs/apk/debug/app-debug.apk
-            app/build/outputs/apk/release/app-release.apk
+            Fir-Android-Source-v12/app/build/outputs/apk/debug/app-debug.apk
+            Fir-Android-Source-v12/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 14
