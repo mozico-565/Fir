@@ -29,22 +29,20 @@ jobs:
 
       - name: Extract Fir source
         run: |
-          rm -rf Fir-Android-Source-v12
-          unzip -q Fir-Android-Source-v12.zip
-          rm -f "Fir-Android-Source-v12/app/src/main/java/com/fir/translate/core/ClipboardHistoryManager-1.kt"
+          rm -rf Fir-Android-Source-v13
+          unzip -q Fir-Android-Source-v13.zip
 
       - name: Build debug and release APKs
-        working-directory: Fir-Android-Source-v12
+        working-directory: Fir-Android-Source-v13
         run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug assembleRelease --stacktrace
+          gradle assembleDebug assembleRelease --stacktrace
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: Fir-APKs
           path: |
-            Fir-Android-Source-v12/app/build/outputs/apk/debug/app-debug.apk
-            Fir-Android-Source-v12/app/build/outputs/apk/release/app-release.apk
+            Fir-Android-Source-v13/app/build/outputs/apk/debug/app-debug.apk
+            Fir-Android-Source-v13/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 14
